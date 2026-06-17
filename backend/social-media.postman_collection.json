@@ -1,0 +1,466 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6",
+		"name": "Social Media Platform API",
+		"description": "API collection for MERN Stack Social Media Platform including User Auth, Posts, Comments, and Likes modules.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.globals.set(\"token\", jsonData.token);",
+									"    console.log(\"Global token set: \" + jsonData.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"johndoe\",\n    \"email\": \"johndoe@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"register"
+							]
+						},
+						"description": "Registers a new user and returns a token."
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.globals.set(\"token\", jsonData.token);",
+									"    console.log(\"Global token set: \" + jsonData.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"johndoe@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						},
+						"description": "Authenticates a user and returns a token."
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						},
+						"description": "Returns profile information of the logged-in user."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Posts",
+			"item": [
+				{
+					"name": "Create Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"My First Post!\",\n    \"content\": \"This is my first post on this amazing social media platform.\",\n    \"imageUrl\": \"https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/posts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"posts"
+							]
+						},
+						"description": "Create a new post."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Posts (Paginated)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/posts?page=1&limit=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"posts"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Retrieve all posts sorted by creation date with offset pagination."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Post",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/posts/:postId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"posts",
+								":postId"
+							],
+							"variable": [
+								{
+									"key": "postId",
+									"value": ""
+								}
+							]
+						},
+						"description": "Retrieve a post by its MongoDB ObjectId."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"My Updated Post!\",\n    \"content\": \"This content has been updated successfully.\",\n    \"imageUrl\": \"https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/posts/:postId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"posts",
+								":postId"
+							],
+							"variable": [
+								{
+									"key": "postId",
+									"value": ""
+								}
+							]
+						},
+						"description": "Update details of a post. User must be the author of the post."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/posts/:postId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"posts",
+								":postId"
+							],
+							"variable": [
+								{
+									"key": "postId",
+									"value": ""
+								}
+							]
+						},
+						"description": "Delete a post. Cascade deletes all related comments. User must be the author."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comments",
+			"item": [
+				{
+					"name": "Add Comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"postId\": \"\",\n    \"content\": \"This is an awesome post! Thanks for sharing.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/comments",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"comments"
+							]
+						},
+						"description": "Add a comment to an existing post."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Post Comments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/comments/post/:postId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"comments",
+								"post",
+								":postId"
+							],
+							"variable": [
+								{
+									"key": "postId",
+									"value": ""
+								}
+							]
+						},
+						"description": "Retrieve all comments on a specific post."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/comments/:commentId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"comments",
+								":commentId"
+							],
+							"variable": [
+								{
+									"key": "commentId",
+									"value": ""
+								}
+							]
+						},
+						"description": "Delete a comment. User must be comment owner or post owner."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Likes",
+			"item": [
+				{
+					"name": "Toggle Like/Unlike",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+								}
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/likes/toggle/:postId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"likes",
+								"toggle",
+								":postId"
+							],
+							"variable": [
+								{
+									"key": "postId",
+									"value": ""
+								}
+							]
+						},
+						"description": "Likes a post if not liked already, otherwise unlikes it."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5000/api",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
